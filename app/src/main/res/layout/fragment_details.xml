@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.DetailsFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="271dp"
+        android:fitsSystemWindows="false"
+        android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
+
+        <include
+            android:id="@+id/motion_layout"
+            layout="@layout/motion_collapsing_bar_detail" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include
+        android:id="@+id/nested_scrolling"
+        layout="@layout/nested_scrolling_detail" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

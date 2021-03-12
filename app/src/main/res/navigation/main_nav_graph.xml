@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/movies_page_fragment">
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.ekosoftware.tmdb.ui.DetailsFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="movieId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/movies_page_fragment"
+        android:name="com.ekosoftware.tmdb.ui.MoviesFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_movies" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/watch_later_page_fragment"
+        android:name="com.ekosoftware.tmdb.ui.WatchLaterFragment"
+        android:label="fragment_watch_later"
+        tools:layout="@layout/fragment_watch_later" >
+        <action
+            android:id="@+id/action_watchLaterFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+</navigation>
