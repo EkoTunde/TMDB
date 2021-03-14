@@ -79,15 +79,9 @@ class MainViewModel @Inject constructor(
 
     private var movie: LiveData<Resource<MovieEntity?>>? = null
 
-    fun getMovie(movieId: Long): LiveData<Resource<MovieEntity?>> =
-        movie ?: //movieId.switchMap { id ->
-            liveData<Resource<MovieEntity?>>(viewModelScope.coroutineContext + Dispatchers.IO) {
-                //emit(Resource.Loading(null))
-                //delay(5000)
-                /*if (id == null) emit(Resource.Success(null))
-                else*/
-                /*id?.let {*/ moviesRepository.getMovie(movieId).collect { emit(it) } //}
-            //}
+    fun getMovie(movieId: Long): LiveData<Resource<MovieEntity?>> = movie
+        ?: liveData<Resource<MovieEntity?>>(viewModelScope.coroutineContext + Dispatchers.IO) {
+            moviesRepository.getMovie(movieId).collect { emit(it) }
         }.also {
             movie = it
         }
@@ -99,13 +93,26 @@ class MainViewModel @Inject constructor(
         savedStateHandle[WATCH_LATER_QUERY_OPTIONS_KEY] = watchQueryOptions
     }
 
-    private var watchLater: LiveData<List<Movie>>? = null
+    private var watchLater: LiveData<Resource<List<MovieEntity>>>? = null
 
-    fun getWatchLater(): LiveData<List<Movie>> = watchLater ?: liveData {
-        emit(emptyList<Movie>())
-    }.also {
-        watchLater = it
-    }
+    fun getWatchLater(): LiveData<Resource<List<MovieEntity>>> =
+        watchLater ?: watchWatchQueryOptions.switchMap {
+            liveData<Resource<List<MovieEntity>>> {
+                emit(Resource.Loading(null))
+                try {
+                    emitSource(
+                        moviesRepository.getWatchLaterMovies(it.query, it.sortBy, it.sortOrder)
+                            .map {
+                                Resource.Success(it)
+                            }
+                    )
+                } catch (e: Exception) {
+                    emit(Resource.Error(e.message ?: ""))
+                }
+            }
+        }.also {
+            watchLater = it
+        }
 
     fun saveToWatchLater() {
         val movieId: Long? = savedStateHandle[LAST_MOVIE_ID_KEY]

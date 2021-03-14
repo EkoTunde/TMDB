@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/watch_later_page_fragment"
-        android:name="com.ekosoftware.tmdb.ui.later.WatchLaterFragment"
+        android:name="com.ekosoftware.tmdb.ui.watchlater.WatchLaterFragment"
         android:label="fragment_watch_later"
         tools:layout="@layout/fragment_watch_later" >
         <action

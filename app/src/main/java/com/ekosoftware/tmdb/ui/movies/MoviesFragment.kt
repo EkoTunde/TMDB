@@ -3,6 +3,7 @@ package com.ekosoftware.tmdb.ui.movies
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.cardview.widget.CardView
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -32,18 +33,24 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private val viewModel by activityViewModels<MainViewModel>()
 
-
-
     private val moviesPagerAdapter = MoviesPagerAdapter { movie, cardView ->
-        //viewModel.setMovieId(movie.id)
+        navigateToDetail(movie.id, cardView)
+    }
+
+    private fun navigateToDetail(movieId: Long, cardView: CardView) {
         exitTransition = MaterialElevationScale(false).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }
         reenterTransition = MaterialElevationScale(true).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }
-        val action = MoviesFragmentDirections.actionHomeFragmentToDetailFragment(movie.id)
-        val extras = FragmentNavigatorExtras(cardView to Strings.get(R.string.movement_card_detail_transition_name, movie.id))
+        val action = MoviesFragmentDirections.actionHomeFragmentToDetailFragment(movieId)
+        val extras = FragmentNavigatorExtras(
+            cardView to Strings.get(
+                R.string.movement_card_detail_transition_name,
+                movieId
+            )
+        )
         findNavController().navigate(action, extras)
     }
 

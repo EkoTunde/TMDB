@@ -1,9 +1,7 @@
 package com.ekosoftware.tmdb.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ekosoftware.tmdb.R
 import com.ekosoftware.tmdb.app.GlideApp
-import com.ekosoftware.tmdb.app.Strings
 import com.ekosoftware.tmdb.data.model.Movie
 import com.ekosoftware.tmdb.databinding.ItemMovieBinding
 import com.ekosoftware.tmdb.util.asUrl
@@ -33,16 +30,6 @@ class MoviesPagerAdapter(private val onClick: (movie: Movie, cardView: CardView)
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        /*init {
-            binding.root.setOnClickListener {
-                bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { position ->
-                    getItem(position)?.let { item ->
-                        onClick.invoke(item)
-                    }
-                }
-            }
-        }*/
 
         fun bind(movie: Movie) {
             binding.apply {
