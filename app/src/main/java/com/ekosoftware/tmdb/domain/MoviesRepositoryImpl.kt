@@ -1,7 +1,6 @@
 package com.ekosoftware.tmdb.domain
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -38,17 +37,13 @@ class MoviesRepositoryImpl @Inject constructor(
 
     @ExperimentalCoroutinesApi
     override suspend fun getMovie(
-        movieId: String,
-        //onFetchSuccess: () -> Unit,
-        //onFetchFailed: (String) -> Unit
+        movieId: Long
     ): Flow<Resource<MovieEntity>> =
         networkBoundResource<MovieEntity, Movie>(
             query = { localDataSource.getMovie(movieId) },
             fetch = { networkDataSource.getMovie(movieId) },
             saveFetchResult = { movie -> localDataSource.save(movie) },
-            shouldFetch = { localDataSource.hasMovie(movieId) > 0L },
-            //onFetchSuccess = onFetchSuccess,
-            //onFetchFailed = { onFetchFailed(it.toString()) }
+            shouldFetch = { localDataSource.hasMovie(movieId) < 1 }
         )
 
     override fun getWatchLaterMovies(
@@ -56,4 +51,6 @@ class MoviesRepositoryImpl @Inject constructor(
         sortBy: String,
         sortOrder: String
     ): LiveData<List<MovieEntity>> = localDataSource.getWatchLaterMovies(query, sortBy, sortOrder)
+
+    override suspend fun toggleWatchLater(movieId: Long) = localDataSource.toggleWatchLater(movieId)
 }

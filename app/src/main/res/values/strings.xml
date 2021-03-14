@@ -103,4 +103,9 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="connection_error">Connection error</string>
+    <string name="search">Search</string>
+    <string name="couldnt_fetch_movie_data_error">Couldn\'t fetch movie\'s data</string>
+    <string name="movement_card_transition_name">movement_card_%1$d</string>
+    <string name="movement_card_detail_transition_name">movement_card_detail</string>
 </resources>

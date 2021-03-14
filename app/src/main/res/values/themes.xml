@@ -16,9 +16,12 @@
     </style>
 
     <style name="CollapsingToolbar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Chip.TMDB.Type" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@color/white</item>
     </style>
 
 </resources>

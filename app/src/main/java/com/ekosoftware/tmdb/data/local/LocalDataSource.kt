@@ -11,9 +11,9 @@ import javax.inject.Singleton
 @Singleton
 class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
 
-    fun getMovie(movieId: String) = movieDao.getMovie(movieId)
+    fun getMovie(movieId: Long) = movieDao.getMovie(movieId)
 
-    fun hasMovie(movieId: String): Long = movieDao.hasMovie(movieId)
+    fun hasMovie(movieId: Long): Int = movieDao.hasMovie(movieId)
 
     fun getWatchLaterMovies(
         query: String,
@@ -26,4 +26,6 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
     }
 
     suspend fun save(movie: Movie) = movieDao.insert(movie.toEntity())
+
+    suspend fun toggleWatchLater(movieId: Long) = movieDao.toggleWatchLater(movieId)
 }

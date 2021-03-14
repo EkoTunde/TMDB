@@ -41,7 +41,7 @@ interface TMDBApi {
 
     @GET("movie/{movie_id}?")
     suspend fun getMovie(
-        @Path("movie_id") movieId: String,
+        @Path("movie_id") movieId: Long,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Movie

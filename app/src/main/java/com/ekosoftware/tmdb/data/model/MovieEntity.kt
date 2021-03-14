@@ -45,14 +45,17 @@ data class MovieEntity(
     @ColumnInfo(name = "revenue")
     var revenue: Long? = null,
 
+    @ColumnInfo(name = "runtime")
+    var runtime: Int? = null,
+
     @ColumnInfo(name = "status")
     var status: String = "",
 
     @ColumnInfo(name = "title")
     var title: String = "",
 
-    @ColumnInfo(name = "vote_average")
-    var voteAverage: Double = 0.0,
+    @ColumnInfo(name = "rating")
+    var rating: Double = 0.0,
 
     @ColumnInfo(name = "vote_count")
     var voteCount: Long = 0L,

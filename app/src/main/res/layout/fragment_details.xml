@@ -1,27 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
+    android:transitionName="@string/movement_card_detail_transition_name"
     android:fitsSystemWindows="true"
-    tools:context=".ui.DetailsFragment">
+    tools:context=".ui.details.DetailsFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="271dp"
-        android:fitsSystemWindows="false"
-        android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="295dp"
+            android:fitsSystemWindows="false"
+            android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <include
+                android:id="@+id/motion_layout"
+                layout="@layout/motion_collapsible_bar_detail" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <include
-            android:id="@+id/motion_layout"
-            layout="@layout/motion_collapsing_bar_detail" />
+            android:id="@+id/nested_scrolling"
+            layout="@layout/nested_scrolling_detail"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            tools:visibility="gone">
 
-    <include
-        android:id="@+id/nested_scrolling"
-        layout="@layout/nested_scrolling_detail" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <include
+                    android:id="@+id/loading"
+                    layout="@layout/loading_details" />
+
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/default_navigation_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="?attr/actionBarItemBackground"
+                android:contentDescription="@string/app_name"
+                android:padding="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_back" />
+
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                tools:text="hola" />
+
+        </RelativeLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
+<MotionScene
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
@@ -83,6 +83,14 @@
                android:rotation="45"
                android:translationX="-10dp"
                android:translationY="-100dp" />
+           <KeyAttribute
+               motion:motionTarget="@+id/floatingActionButton"
+               motion:framePosition="0"
+               android:rotation="0" />
+           <KeyAttribute
+               motion:motionTarget="@+id/floatingActionButton"
+               motion:framePosition="50"
+               android:rotation="90" />
        </KeyFrameSet>
     </Transition>
 
@@ -154,16 +162,15 @@
                 motion:customColorValue="?attr/colorControlNormal" />
         </Constraint>
         <Constraint
-            android:layout_marginEnd="16dp"
             android:layout_height="wrap_content"
             motion:layout_constraintHorizontal_bias="0.0"
             android:layout_width="0dp"
-            motion:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
             motion:layout_constraintStart_toEndOf="@id/navigationIcon"
             android:layout_marginStart="16dp"
             android:id="@+id/title"
             motion:layout_constraintBottom_toBottomOf="@+id/navigationIcon"
-            motion:layout_constraintTop_toTopOf="@+id/navigationIcon" />
+            motion:layout_constraintTop_toTopOf="@+id/navigationIcon"
+            motion:layout_constraintEnd_toEndOf="@+id/floatingActionButton" />
         <Constraint
             android:layout_height="15dp"
             android:layout_marginTop="8dp"

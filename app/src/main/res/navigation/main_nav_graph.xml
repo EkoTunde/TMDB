@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.ekosoftware.tmdb.ui.DetailsFragment"
+        android:name="com.ekosoftware.tmdb.ui.details.DetailsFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_details" >
         <argument
@@ -16,20 +16,35 @@
     </fragment>
     <fragment
         android:id="@+id/movies_page_fragment"
-        android:name="com.ekosoftware.tmdb.ui.MoviesFragment"
+        android:name="com.ekosoftware.tmdb.ui.movies.MoviesFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_movies" >
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/watch_later_page_fragment"
-        android:name="com.ekosoftware.tmdb.ui.WatchLaterFragment"
+        android:name="com.ekosoftware.tmdb.ui.later.WatchLaterFragment"
         android:label="fragment_watch_later"
         tools:layout="@layout/fragment_watch_later" >
         <action
             android:id="@+id/action_watchLaterFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/search_page_fragment"
+        android:name="com.ekosoftware.tmdb.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

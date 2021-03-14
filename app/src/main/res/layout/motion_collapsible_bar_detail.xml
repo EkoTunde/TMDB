@@ -5,7 +5,7 @@
     android:id="@+id/motion_layout"
     style="@style/CollapsingToolbar"
     android:layout_width="match_parent"
-    android:layout_height="271dp"
+    android:layout_height="295dp"
     android:animateLayoutChanges="true"
     android:elevation="15dp"
     android:fitsSystemWindows="false"
@@ -27,10 +27,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/backdrop_example" />
+        tools:srcCompat="@mipmap/backdrop_example" />
 
     <ImageView
         android:id="@+id/poster_image"
+        android:transitionName="imageView"
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:layout_marginStart="16dp"
@@ -39,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/backdrop_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backdrop_image"
-        app:srcCompat="@mipmap/poster_example" />
+        tools:srcCompat="@mipmap/poster_example" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -62,7 +63,7 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="marquee"
         android:maxLines="2"
-        android:text="Relatos salvajes"
+        tools:text="Relatos salvajes"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
@@ -76,8 +77,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:maxLines="2"
-        android:text="Drama - Thriller - Comedy"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="marquee"
+        android:maxLines="3"
+        tools:text="Drama - Thriller - Comedy"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
         app:layout_constraintStart_toEndOf="@+id/poster_image"
         app:layout_constraintTop_toBottomOf="@+id/title" />

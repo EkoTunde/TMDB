@@ -44,6 +44,9 @@ data class Movie(
     @SerializedName("revenue")
     val revenue: Long? = null,
 
+    @SerializedName("runtime")
+    val runtime: Int? = null,
+
     @SerializedName("status")
     val status: String = "",
 

@@ -17,9 +17,10 @@ fun Movie.toEntity() = MovieEntity(
     posterPath = this.posterPath,
     releaseDate = this.releaseDate,
     revenue = this.revenue,
+    runtime = this.runtime,
     status = this.status,
     title = this.title,
-    voteAverage = this.voteAverage,
+    rating = this.voteAverage,
     voteCount = this.voteCount
 )
 

@@ -35,7 +35,7 @@ class NetworkDataSource @Inject constructor(private val tmdbApi: TMDBApi) {
         )
     )
 
-    suspend fun getMovie(movieId: String): Movie =
+    suspend fun getMovie(movieId: Long): Movie =
         tmdbApi.getMovie(movieId, Secrets.TMDB_API_KEY, "en-US")
 
 }

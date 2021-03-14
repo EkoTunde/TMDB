@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MoviesFragment">
+    tools:context=".ui.movies.MoviesFragment">
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -12,7 +12,8 @@
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="15dp"
-        android:background="@color/white"
+        style="@style/Chip.TMDB.Type"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -62,6 +63,7 @@
         android:layout_marginTop="?attr/actionBarSize">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:transitionGroup="true"
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

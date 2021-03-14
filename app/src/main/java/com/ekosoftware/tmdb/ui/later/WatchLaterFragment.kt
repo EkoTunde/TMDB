@@ -1,17 +1,19 @@
-package com.ekosoftware.tmdb.ui
+package com.ekosoftware.tmdb.ui.later
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.ekosoftware.tmdb.R
 import com.ekosoftware.tmdb.databinding.FragmentWatchLaterBinding
-import com.ekosoftware.tmdb.presentation.MoviesViewModel
+import com.ekosoftware.tmdb.presentation.MainViewModel
 import com.ekosoftware.tmdb.ui.adapter.MoviesLoadStateAdapter
 import com.ekosoftware.tmdb.ui.adapter.MoviesPagerAdapter
+import com.ekosoftware.tmdb.ui.movies.MoviesFragmentDirections
 import com.ekosoftware.tmdb.util.hide
 import com.ekosoftware.tmdb.util.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,11 +23,14 @@ class WatchLaterFragment : Fragment(R.layout.fragment_watch_later) {
     private var _binding: FragmentWatchLaterBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MoviesViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
-    private val moviesAdapter = MoviesPagerAdapter { movie ->
+    private val moviesAdapter = MoviesPagerAdapter { movie, imageView ->
         val action = MoviesFragmentDirections.actionHomeFragmentToDetailFragment(movie.id)
-        findNavController().navigate(action)
+        val extras = FragmentNavigatorExtras(
+            imageView to (movie.posterPath ?: "")
+        )
+        findNavController().navigate(action, extras)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
