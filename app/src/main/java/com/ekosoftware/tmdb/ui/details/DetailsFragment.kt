@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ekosoftware.tmdb.R
 import com.ekosoftware.tmdb.app.GlideApp
+import com.ekosoftware.tmdb.app.Strings
 import com.ekosoftware.tmdb.core.Resource
 import com.ekosoftware.tmdb.data.model.MovieEntity
 import com.ekosoftware.tmdb.databinding.FragmentDetailsBinding
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_details.view.*
 import kotlinx.android.synthetic.main.loading_details.view.*
 
 @AndroidEntryPoint
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
@@ -41,35 +41,26 @@ class DetailsFragment : Fragment() {
             scrimColor = Color.TRANSPARENT
             setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
         }
-        viewModel.setMovieId(args.movieId)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        loading()
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentDetailsBinding.bind(view)
+        loading()
         initViews()
         fetchMovie()
     }
 
     private fun initViews() = binding.apply {
         arrayOf(
-            motionLayout.navigationIcon,
+            this.motionLayout.navigationIcon,
             shimmerLayout.loading.navigationIcon,
             binding.defaultNavigationIcon
         ).forEach {
             it.setOnClickListener { navigateUp() }
         }
         motionLayout.floatingActionButton.setOnClickListener {
-            viewModel.saveToWatchLater()
+            viewModel.saveToWatchLater(args.movieId)
         }
     }
 
@@ -115,6 +106,8 @@ class DetailsFragment : Fragment() {
             val runtime = "${it.runtime}m"
             nestedScrolling.runtime.text = runtime
 
+            nestedScrolling.releaseDateText.text = Strings.get(R.string.relase_date_placeholder, it.releaseDate)
+
             nestedScrolling.overview.text = it.overview
 
             motionLayout.floatingActionButton.setImageResource(if (it.watchLater) R.drawable.ic_playlist_add_check else R.drawable.ic_playlist_add)
@@ -151,16 +144,12 @@ class DetailsFragment : Fragment() {
     }
 
     private fun navigateUp() {
-        viewModel.clearMovieId()
-        binding.shimmerLayout.isVisible = true
-        binding.nestedScrolling.nested.isVisible = false
-        binding.appBarLayout.isVisible = false
-        binding.errorLayout.isVisible = false
+        viewModel.clearMovie()
         findNavController().popBackStack()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.clearMovieId()
+        viewModel.clearMovie()
     }
 }

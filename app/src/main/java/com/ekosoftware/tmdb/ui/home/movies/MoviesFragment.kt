@@ -1,28 +1,25 @@
-package com.ekosoftware.tmdb.ui.movies
+package com.ekosoftware.tmdb.ui.home.movies
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.View
-import androidx.cardview.widget.CardView
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.ekosoftware.tmdb.R
 import com.ekosoftware.tmdb.app.Strings
 import com.ekosoftware.tmdb.databinding.FragmentMoviesBinding
 import com.ekosoftware.tmdb.presentation.MainViewModel
-import com.ekosoftware.tmdb.ui.adapter.MoviesPagerAdapter
-import com.ekosoftware.tmdb.ui.adapter.MoviesLoadStateAdapter
-import com.ekosoftware.tmdb.ui.details.DetailsFragmentArgs
-import com.google.android.material.transition.MaterialElevationScale
+import com.ekosoftware.tmdb.ui.adapters.MoviesPagingAdapter
+import com.ekosoftware.tmdb.ui.adapters.MoviesLoadStateAdapter
+import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MoviesFragment : Fragment(R.layout.fragment_movies) {
+class MoviesFragment : Fragment() {
 
     companion object {
         private const val TAG = "MoviesFragment"
@@ -33,47 +30,62 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private val viewModel by activityViewModels<MainViewModel>()
 
-    private val moviesPagerAdapter = MoviesPagerAdapter { movie, cardView ->
-        navigateToDetail(movie.id, cardView)
+    private val moviesPagingAdapter = MoviesPagingAdapter { movie, materialCardView ->
+        navigateToDetail(movie.id, materialCardView)
     }
 
-    private fun navigateToDetail(movieId: Long, cardView: CardView) {
-        exitTransition = MaterialElevationScale(false).apply {
+    private fun navigateToDetail(movieId: Long, cardView: MaterialCardView) {
+        /*exitTransition = MaterialElevationScale(false).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }
         reenterTransition = MaterialElevationScale(true).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
+        }*/
+        val emailCardDetailTransitionName = Strings.get(R.string.movie_card_detail_transition_name)
+        val extras = FragmentNavigatorExtras(cardView to emailCardDetailTransitionName)
+        val directions = MoviesFragmentDirections.actionHomeFragmentToDetailFragment(movieId)
+        findNavController().navigate(directions, extras)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMoviesBinding.inflate(inflater, container, false)
+        binding.searchToolbar.inflateMenu(R.menu.search_menu)
+        binding.searchToolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_item_search -> {
+                    val directions =
+                        MoviesFragmentDirections.actionMoviesPageFragmentToSearchFragment()
+                    findNavController().navigate(directions)
+                    true
+                }
+                else -> true
+            }
         }
-        val action = MoviesFragmentDirections.actionHomeFragmentToDetailFragment(movieId)
-        val extras = FragmentNavigatorExtras(
-            cardView to Strings.get(
-                R.string.movement_card_detail_transition_name,
-                movieId
-            )
-        )
-        findNavController().navigate(action, extras)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMoviesBinding.bind(view)
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
         initViews()
-        initPagerAdapter()
+        initPagingAdapter()
         fetchData()
     }
 
     private fun initViews() = binding.apply {
-        recyclerView.adapter = moviesPagerAdapter.withLoadStateHeaderAndFooter(
-            header = MoviesLoadStateAdapter { moviesPagerAdapter.retry() },
-            footer = MoviesLoadStateAdapter { moviesPagerAdapter.retry() }
+        recyclerView.adapter = moviesPagingAdapter.withLoadStateHeaderAndFooter(
+            header = MoviesLoadStateAdapter { moviesPagingAdapter.retry() },
+            footer = MoviesLoadStateAdapter { moviesPagingAdapter.retry() }
         )
         buttonRetry.setOnClickListener {
-            moviesPagerAdapter.retry()
+            moviesPagingAdapter.retry()
         }
         chipGroup.setOnCheckedChangeListener { _, checkedId ->
-
             val id = when (checkedId) {
                 R.id.chip_now_playing -> MainViewModel.TYPE_NOW_PLAYING
                 R.id.chip_popular -> MainViewModel.TYPE_POPULAR
@@ -85,14 +97,14 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
         }
     }
 
-    private fun initPagerAdapter() = moviesPagerAdapter.addLoadStateListener { loadState ->
+    private fun initPagingAdapter() = moviesPagingAdapter.addLoadStateListener { loadState ->
         binding.apply {
             progressBar.isVisible = loadState.source.refresh is LoadState.Loading
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
             buttonRetry.isVisible = loadState.source.refresh is LoadState.Error
             textViewError.isVisible = loadState.source.refresh is LoadState.Error
 
-            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && moviesPagerAdapter.itemCount < 1) {
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && moviesPagingAdapter.itemCount < 1) {
                 recyclerView.isVisible = false
                 textViewEmpty.isVisible = true
             } else {
@@ -102,7 +114,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
     }
 
     private fun fetchData() = viewModel.movies.observe(viewLifecycleOwner) {
-        moviesPagerAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+        moviesPagingAdapter.submitData(viewLifecycleOwner.lifecycle, it)
     }
 
     override fun onDestroy() {

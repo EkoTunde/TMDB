@@ -2,20 +2,25 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:transitionName="@string/movement_card_transition_name"
-    app:cardCornerRadius="0dp">
+    android:transitionName="@string/movie_card_transition_name"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
+    android:layout_marginVertical="2dp"
+    android:layout_marginHorizontal="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="164dp">
+        android:layout_height="180dp">
 
         <ImageView
             android:id="@+id/poster"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:layout_margin="16dp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="16dp"
             android:contentDescription="@string/app_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

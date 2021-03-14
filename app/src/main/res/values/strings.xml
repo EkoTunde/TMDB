@@ -106,6 +106,8 @@
     <string name="connection_error">Connection error</string>
     <string name="search">Search</string>
     <string name="couldnt_fetch_movie_data_error">Couldn\'t fetch movie\'s data</string>
-    <string name="movement_card_transition_name">movement_card_%1$d</string>
-    <string name="movement_card_detail_transition_name">movement_card_detail</string>
+    <string name="movie_card_transition_name">movie_card_%1$s</string>
+    <string name="movie_card_detail_transition_name">movie_card_detail</string>
+    <string name="watch_later_title">Watch later</string>
+    <string name="relase_date_placeholder">Release date: %1$s</string>
 </resources>

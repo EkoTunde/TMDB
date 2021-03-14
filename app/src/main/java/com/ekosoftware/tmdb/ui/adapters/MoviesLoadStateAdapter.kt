@@ -1,4 +1,4 @@
-package com.ekosoftware.tmdb.ui.adapter
+package com.ekosoftware.tmdb.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

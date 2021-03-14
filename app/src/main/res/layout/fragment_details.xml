@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionName="@string/movement_card_detail_transition_name"
-    android:fitsSystemWindows="true"
+    app:cardCornerRadius="0dp"
+    android:transitionName="@string/movie_card_detail_transition_name"
     tools:context=".ui.details.DetailsFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

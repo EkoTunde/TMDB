@@ -9,42 +9,47 @@
         android:id="@+id/detailFragment"
         android:name="com.ekosoftware.tmdb.ui.details.DetailsFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_details" >
+        tools:layout="@layout/fragment_details">
         <argument
             android:name="movieId"
             app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/movies_page_fragment"
-        android:name="com.ekosoftware.tmdb.ui.movies.MoviesFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_movies" >
+        android:name="com.ekosoftware.tmdb.ui.home.movies.MoviesFragment"
+        tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="true" />
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_movies_page_fragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/watch_later_page_fragment"
-        android:name="com.ekosoftware.tmdb.ui.watchlater.WatchLaterFragment"
-        android:label="fragment_watch_later"
-        tools:layout="@layout/fragment_watch_later" >
+        android:name="com.ekosoftware.tmdb.ui.home.watchlater.WatchLaterFragment"
+        tools:layout="@layout/fragment_watch_later">
         <action
             android:id="@+id/action_watchLaterFragment_to_detailFragment"
-            app:destination="@id/detailFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="true" />
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_watch_later_page_fragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/search_page_fragment"
+        android:id="@+id/searchFragment"
         android:name="com.ekosoftware.tmdb.ui.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_detailFragment"
-            app:destination="@id/detailFragment"
-            app:launchSingleTop="false"
-            app:popUpToInclusive="true" />
+            app:destination="@id/detailFragment" />
     </fragment>
 </navigation>

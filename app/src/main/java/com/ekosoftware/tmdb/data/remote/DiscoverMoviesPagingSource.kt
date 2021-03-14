@@ -2,7 +2,6 @@ package com.ekosoftware.tmdb.data.remote
 
 import androidx.paging.PagingSource
 import com.ekosoftware.tmdb.data.model.Movie
-import com.ekosoftware.tmdb.secrets.Secrets
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -11,15 +10,14 @@ import javax.inject.Singleton
 private const val TMDB_STARTING_PAGE_INDEX = 1
 
 @Singleton
-class MoviesPagingSource @Inject constructor(
-    private val networkDataSource: NetworkDataSource,
-    private val typePath: String
+class DiscoverMoviesPagingSource @Inject constructor(
+    private val networkDataSource: NetworkDataSource
 ) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         val position = params.key ?: TMDB_STARTING_PAGE_INDEX
         return try {
-            val response = networkDataSource.getMoviesForType(typePath, position)
+            val response = networkDataSource.discoverMovies(position)
             val movies = response.results
             LoadResult.Page(
                 data = movies,

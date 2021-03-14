@@ -27,7 +27,7 @@ fun Movie.toEntity() = MovieEntity(
 fun List<Genre>.stringify(): String {
     val builder = StringBuilder()
     this.forEachIndexed { i, genre ->
-        if (i != 0) builder.append("• ")
+        if (i != 0) builder.append(" • ")
         builder.append(genre.name)
     }
     return builder.toString()

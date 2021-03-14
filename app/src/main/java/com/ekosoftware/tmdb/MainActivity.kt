@@ -4,11 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ekosoftware.tmdb.databinding.ActivityMainBinding
 import com.ekosoftware.tmdb.presentation.MainViewModel
+import com.ekosoftware.tmdb.util.hideKeyboard
 import com.ekosoftware.tmdb.util.snackNBite
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,25 +33,20 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-            .setupWithNavController(navController)
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.bottomNavigationView.isVisible = destination.id != R.id.detailFragment
+            binding.bottomNavigationView.isVisible =
+                destination.id != R.id.detailFragment && destination.id != R.id.searchFragment
+            hideKeyboard()
+            if (destination.id in arrayOf(
+                    R.id.movies_page_fragment,
+                    R.id.watch_later_page_fragment
+                )
+            ) {
+                mainViewModel.submitMovieQuery(null)
+            }
         }
-
-        observeAndShowErrors()
-    }
-
-    private fun observeAndShowErrors() = mainViewModel.errorEvent.observe(this) {
-        it?.let { error ->
-            binding.bottomNavigationView.isVisible = true
-            val p = if (error.actionMsg == null || error.action == null) null else Pair(
-                error.actionMsg,
-                error.action
-            )
-            this@MainActivity.binding.root.snackNBite(error.msg, p)
-            mainViewModel.errorReceived()
-        }
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

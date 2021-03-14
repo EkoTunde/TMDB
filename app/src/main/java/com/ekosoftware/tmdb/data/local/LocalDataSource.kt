@@ -1,6 +1,7 @@
 package com.ekosoftware.tmdb.data.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Query
 import com.ekosoftware.tmdb.data.model.Movie
 import com.ekosoftware.tmdb.data.model.MovieEntity
@@ -15,15 +16,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
 
     fun hasMovie(movieId: Long): Int = movieDao.hasMovie(movieId)
 
-    fun getWatchLaterMovies(
-        query: String,
-        sortBy: String,
-        sortOrder: String
-    ): LiveData<List<MovieEntity>> = if (sortOrder == "ASC") {
-        movieDao.getWatchLaterMoviesAsc(query, sortBy)
-    } else {
-        movieDao.getWatchLaterMoviesDesc(query, sortBy)
-    }
+    fun getWatchLaterMovies(): LiveData<List<MovieEntity>> =
+        movieDao.getWatchLaterMovies()
 
     suspend fun save(movie: Movie) = movieDao.insert(movie.toEntity())
 

@@ -8,4 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="shimmer_background">#dddddd</color>
+    <color name="overlay_filter">#33000000</color>
 </resources>

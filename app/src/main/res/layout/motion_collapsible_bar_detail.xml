@@ -22,6 +22,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
         android:cropToPadding="true"
+        android:foreground="@color/overlay_filter"
         android:scaleType="centerCrop"
         app:layout_collapseMode="none"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +32,6 @@
 
     <ImageView
         android:id="@+id/poster_image"
-        android:transitionName="imageView"
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:layout_marginStart="16dp"
@@ -63,12 +63,12 @@
         android:layout_marginEnd="16dp"
         android:ellipsize="marquee"
         android:maxLines="2"
-        tools:text="Relatos salvajes"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
         app:layout_constraintStart_toEndOf="@+id/poster_image"
-        app:layout_constraintTop_toBottomOf="@+id/backdrop_image" />
+        app:layout_constraintTop_toBottomOf="@+id/backdrop_image"
+        tools:text="Relatos salvajes" />
 
     <TextView
         android:id="@+id/genres"
@@ -80,10 +80,10 @@
         android:layout_marginBottom="2dp"
         android:ellipsize="marquee"
         android:maxLines="3"
-        tools:text="Drama - Thriller - Comedy"
         app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
         app:layout_constraintStart_toEndOf="@+id/poster_image"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="Drama - Thriller - Comedy" />
 
     <ImageButton
         android:id="@+id/navigationIcon"

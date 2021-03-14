@@ -9,12 +9,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/search_page_fragment"
-        android:icon="@drawable/ic_search"
-        android:title="@string/search"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/watch_later_page_fragment"
         android:icon="@drawable/ic_watch_later"
         android:title="@string/wath_later"

@@ -1,5 +1,6 @@
 package com.ekosoftware.tmdb.presentation
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -21,11 +22,12 @@ class MainViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "MainViewModel"
-        private const val DEFAULT_QUERY_TYPE_KEY = ""
-        private const val LAST_MOVIE_ID_KEY = "Last movie ID key"
-        private val DEFAULT_QUERY_OPTIONS =
-            WatchQueryOptions("", WatchQueryOptions.SORT_RATING, WatchQueryOptions.SORT_ORDER_DESC)
-        private const val WATCH_LATER_QUERY_OPTIONS_KEY = "watch later query options key"
+        private const val MOVIES_OPTIONS_KEY = "movies options key"
+
+        private const val DEFAULT_WATCH_LATER_QUERY = ""
+        private const val WATCH_LATER_QUERY_KEY = "watch later query key"
+
+        private const val SEARCH_QUERY_KEY = "search query key"
 
         const val TYPE_NOW_PLAYING = 1
         const val TYPE_POPULAR = 2
@@ -35,16 +37,15 @@ class MainViewModel @Inject constructor(
         private const val SAVED_ERROR_EVENT_KEY = "saved error event key"
     }
 
-    private val currentQueryType: MutableLiveData<Int> = savedStateHandle.getLiveData<Int>(
-        DEFAULT_QUERY_TYPE_KEY, TYPE_TOP_RATED
-    )
+    private val currentQueryType: MutableLiveData<Int> =
+        savedStateHandle.getLiveData<Int>(MOVIES_OPTIONS_KEY, TYPE_TOP_RATED)
 
     init {
         setQueryType(TYPE_TOP_RATED)
     }
 
     fun setQueryType(type: Int) {
-        savedStateHandle[DEFAULT_QUERY_TYPE_KEY] = type
+        savedStateHandle[MOVIES_OPTIONS_KEY] = type
     }
 
     private var _movies: LiveData<PagingData<Movie>>? = null
@@ -66,14 +67,7 @@ class MainViewModel @Inject constructor(
             _movies = it
         }
 
-    private val movieId = savedStateHandle.getLiveData<Long?>(LAST_MOVIE_ID_KEY, null)
-
-    fun setMovieId(id: Long) {
-        savedStateHandle[LAST_MOVIE_ID_KEY] = id
-    }
-
-    fun clearMovieId() {
-        savedStateHandle[LAST_MOVIE_ID_KEY] = null
+    fun clearMovie() {
         movie = null
     }
 
@@ -81,57 +75,50 @@ class MainViewModel @Inject constructor(
 
     fun getMovie(movieId: Long): LiveData<Resource<MovieEntity?>> = movie
         ?: liveData<Resource<MovieEntity?>>(viewModelScope.coroutineContext + Dispatchers.IO) {
-            moviesRepository.getMovie(movieId).collect { emit(it) }
+            moviesRepository.getMovie(movieId).collect {
+                Log.d(TAG, "getMovie: $it")
+                emit(it)
+            }
         }.also {
             movie = it
         }
 
-    private val watchWatchQueryOptions: MutableLiveData<WatchQueryOptions> =
-        savedStateHandle.getLiveData(WATCH_LATER_QUERY_OPTIONS_KEY, DEFAULT_QUERY_OPTIONS)
+    private val searchQuery = savedStateHandle.getLiveData<String>(SEARCH_QUERY_KEY, null)
 
-    fun setWatchLaterQueryOptions(watchQueryOptions: WatchQueryOptions) {
-        savedStateHandle[WATCH_LATER_QUERY_OPTIONS_KEY] = watchQueryOptions
+    fun submitMovieQuery(query: String?) {
+        savedStateHandle[SEARCH_QUERY_KEY] = query
     }
+
+    private var _searchedMovies: LiveData<PagingData<Movie>>? = null
+
+    val searchedMovies: LiveData<PagingData<Movie>>
+        get() = _searchedMovies ?: searchQuery.switchMap { query ->
+            if (query.isNullOrEmpty()) {
+                moviesRepository.discoverMovies().cachedIn(viewModelScope)
+            } else {
+                moviesRepository.searchMovies(query).cachedIn(viewModelScope)
+            }
+        }.also {
+            _searchedMovies = it
+        }
 
     private var watchLater: LiveData<Resource<List<MovieEntity>>>? = null
 
     fun getWatchLater(): LiveData<Resource<List<MovieEntity>>> =
-        watchLater ?: watchWatchQueryOptions.switchMap {
-            liveData<Resource<List<MovieEntity>>> {
-                emit(Resource.Loading(null))
-                try {
-                    emitSource(
-                        moviesRepository.getWatchLaterMovies(it.query, it.sortBy, it.sortOrder)
-                            .map {
-                                Resource.Success(it)
-                            }
-                    )
-                } catch (e: Exception) {
-                    emit(Resource.Error(e.message ?: ""))
-                }
+        watchLater ?: liveData<Resource<List<MovieEntity>>> {
+            emit(Resource.Loading(null))
+            try {
+                emitSource(
+                    moviesRepository.getWatchLaterMovies().map { Resource.Success(it) }
+                )
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message ?: ""))
             }
         }.also {
             watchLater = it
         }
 
-    fun saveToWatchLater() {
-        val movieId: Long? = savedStateHandle[LAST_MOVIE_ID_KEY]
-        movieId?.let {
-            viewModelScope.launch {
-                moviesRepository.toggleWatchLater(it)
-            }
-        }
+    fun saveToWatchLater(movieId: Long) = viewModelScope.launch {
+        moviesRepository.toggleWatchLater(movieId)
     }
-
-    fun submitError(errorEvent: ErrorEvent) {
-        this.errorEvent.value = errorEvent
-    }
-
-    fun errorReceived() {
-        savedStateHandle[SAVED_ERROR_EVENT_KEY] = null
-    }
-
-    val errorEvent: MutableLiveData<ErrorEvent?> =
-        savedStateHandle.getLiveData<ErrorEvent?>(SAVED_ERROR_EVENT_KEY, null)
 }
-

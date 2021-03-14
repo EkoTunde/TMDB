@@ -9,9 +9,7 @@ import com.ekosoftware.tmdb.core.Resource
 import com.ekosoftware.tmdb.data.local.LocalDataSource
 import com.ekosoftware.tmdb.data.model.Movie
 import com.ekosoftware.tmdb.data.model.MovieEntity
-import com.ekosoftware.tmdb.data.remote.MoviesPagingSource
-import com.ekosoftware.tmdb.data.remote.NetworkDataSource
-import com.ekosoftware.tmdb.data.remote.TMDBApi
+import com.ekosoftware.tmdb.data.remote.*
 import com.ekosoftware.tmdb.util.networkBoundResource
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +19,6 @@ import javax.inject.Inject
 @ActivityRetainedScoped
 class MoviesRepositoryImpl @Inject constructor(
     private val networkDataSource: NetworkDataSource,
-    private val api: TMDBApi,
     private val localDataSource: LocalDataSource
 ) : MoviesRepository {
 
@@ -32,13 +29,31 @@ class MoviesRepositoryImpl @Inject constructor(
                 maxSize = 100,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { MoviesPagingSource(typePath, api) }
+            pagingSourceFactory = { MoviesPagingSource(networkDataSource, typePath) }
+        ).liveData
+
+    override fun discoverMovies(): LiveData<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { DiscoverMoviesPagingSource(networkDataSource) }
+        ).liveData
+
+    override fun searchMovies(query: String): LiveData<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { SearchMoviesPagingSource(query, networkDataSource) }
         ).liveData
 
     @ExperimentalCoroutinesApi
-    override suspend fun getMovie(
-        movieId: Long
-    ): Flow<Resource<MovieEntity>> =
+    override suspend fun getMovie(movieId: Long): Flow<Resource<MovieEntity>> =
         networkBoundResource<MovieEntity, Movie>(
             query = { localDataSource.getMovie(movieId) },
             fetch = { networkDataSource.getMovie(movieId) },
@@ -46,11 +61,8 @@ class MoviesRepositoryImpl @Inject constructor(
             shouldFetch = { localDataSource.hasMovie(movieId) < 1 }
         )
 
-    override fun getWatchLaterMovies(
-        query: String,
-        sortBy: String,
-        sortOrder: String
-    ): LiveData<List<MovieEntity>> = localDataSource.getWatchLaterMovies(query, sortBy, sortOrder)
+    override fun getWatchLaterMovies(): LiveData<List<MovieEntity>> =
+        localDataSource.getWatchLaterMovies()
 
     override suspend fun toggleWatchLater(movieId: Long) = localDataSource.toggleWatchLater(movieId)
 }

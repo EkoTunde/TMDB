@@ -1,20 +1,20 @@
-package com.ekosoftware.tmdb.ui.adapter
+package com.ekosoftware.tmdb.ui.adapters
 
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ekosoftware.tmdb.app.GlideApp
-import com.ekosoftware.tmdb.data.model.Movie
 import com.ekosoftware.tmdb.data.model.MovieEntity
 import com.ekosoftware.tmdb.databinding.ItemMovieBinding
 import com.google.android.material.card.MaterialCardView
 
 class MoviesListAdapter(
-    private var onSelected: (movie: MovieEntity, cardView: MaterialCardView) -> Unit
+    private val onSelected: (movie: MovieEntity, cardView: MaterialCardView) -> Unit
 ) :
     ListAdapter<MovieEntity, MoviesListAdapter.MoviesListViewHolder>(MovieDiffCallback()) {
 
@@ -45,12 +45,17 @@ class MoviesListAdapter(
         )
     }
 
+    private val TAG = "MoviesListAdapter"
     override fun onBindViewHolder(holderList: MoviesListViewHolder, position: Int) {
+        Log.d(TAG, "onBindViewHolder: ${getItem(position)}")
         holderList.bind(getItem(position))
     }
 }
 
 class MovieDiffCallback : DiffUtil.ItemCallback<MovieEntity>() {
-    override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean = oldItem == newItem
+    override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
+        oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
+        oldItem == newItem
 }
