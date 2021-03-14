@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.ekosoftware.tmdb.R
 import com.ekosoftware.tmdb.app.Strings
@@ -15,6 +16,7 @@ import com.ekosoftware.tmdb.databinding.FragmentMoviesBinding
 import com.ekosoftware.tmdb.presentation.MainViewModel
 import com.ekosoftware.tmdb.ui.adapter.MoviesPagerAdapter
 import com.ekosoftware.tmdb.ui.adapter.MoviesLoadStateAdapter
+import com.ekosoftware.tmdb.ui.details.DetailsFragmentArgs
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,8 +32,10 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
 
     private val viewModel by activityViewModels<MainViewModel>()
 
+
+
     private val moviesPagerAdapter = MoviesPagerAdapter { movie, cardView ->
-        viewModel.setMovieId(movie.id)
+        //viewModel.setMovieId(movie.id)
         exitTransition = MaterialElevationScale(false).apply {
             duration = resources.getInteger(R.integer.motion_duration_large).toLong()
         }

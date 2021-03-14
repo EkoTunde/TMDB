@@ -22,7 +22,7 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment"
-            app:launchSingleTop="true"
+            app:launchSingleTop="false"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -33,7 +33,7 @@
         <action
             android:id="@+id/action_watchLaterFragment_to_detailFragment"
             app:destination="@id/detailFragment"
-            app:launchSingleTop="true"
+            app:launchSingleTop="false"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -44,7 +44,7 @@
         <action
             android:id="@+id/action_searchFragment_to_detailFragment"
             app:destination="@id/detailFragment"
-            app:launchSingleTop="true"
+            app:launchSingleTop="false"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

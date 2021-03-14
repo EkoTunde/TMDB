@@ -16,7 +16,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
     crossinline shouldFetch: () -> Boolean = { true }
 ) = channelFlow {
-    delay(2000)
     if (shouldFetch()) {
         val loading = launch {
             query().collect { send(Resource.Loading(it)) }

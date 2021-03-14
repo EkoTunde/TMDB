@@ -74,19 +74,20 @@ class MainViewModel @Inject constructor(
 
     fun clearMovieId() {
         savedStateHandle[LAST_MOVIE_ID_KEY] = null
+        movie = null
     }
 
     private var movie: LiveData<Resource<MovieEntity?>>? = null
 
-    fun getMovie(): LiveData<Resource<MovieEntity?>> =
-        movie ?: movieId.switchMap { id ->
+    fun getMovie(movieId: Long): LiveData<Resource<MovieEntity?>> =
+        movie ?: //movieId.switchMap { id ->
             liveData<Resource<MovieEntity?>>(viewModelScope.coroutineContext + Dispatchers.IO) {
                 //emit(Resource.Loading(null))
                 //delay(5000)
                 /*if (id == null) emit(Resource.Success(null))
                 else*/
-                id?.let { moviesRepository.getMovie(id).collect { emit(it) } }
-            }
+                /*id?.let {*/ moviesRepository.getMovie(movieId).collect { emit(it) } //}
+            //}
         }.also {
             movie = it
         }
@@ -125,16 +126,5 @@ class MainViewModel @Inject constructor(
 
     val errorEvent: MutableLiveData<ErrorEvent?> =
         savedStateHandle.getLiveData<ErrorEvent?>(SAVED_ERROR_EVENT_KEY, null)
-
-    private var _incomingError: LiveData<ErrorEvent?>? = null
-
-    val incomingError: LiveData<ErrorEvent?>
-        get() = _incomingError ?: errorEvent.switchMap {
-            liveData(viewModelScope.coroutineContext + Dispatchers.Default) {
-                emit(it)
-            }
-        }.also {
-            _incomingError = it
-        }
 }
 

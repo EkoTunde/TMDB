@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ekosoftware.tmdb.R
@@ -30,6 +31,7 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by activityViewModels()
+    private val args: DetailsFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class DetailsFragment : Fragment() {
             scrimColor = Color.TRANSPARENT
             setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
         }
+        viewModel.setMovieId(args.movieId)
     }
 
     override fun onCreateView(
@@ -47,12 +50,12 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        loading()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loading()
         initViews()
         fetchMovie()
     }
@@ -71,7 +74,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun fetchMovie() =
-        viewModel.getMovie().observe(viewLifecycleOwner) { result ->
+        viewModel.getMovie(args.movieId).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> loading()
                 is Resource.Success -> {
@@ -149,13 +152,11 @@ class DetailsFragment : Fragment() {
 
     private fun navigateUp() {
         viewModel.clearMovieId()
-        //loading()
         binding.shimmerLayout.isVisible = true
         binding.nestedScrolling.nested.isVisible = false
         binding.appBarLayout.isVisible = false
         binding.errorLayout.isVisible = false
         findNavController().popBackStack()
-        //findNavController().navigateUp()
     }
 
     override fun onDestroyView() {
