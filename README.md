@@ -7,6 +7,7 @@ Simple-sample app for searching movies and for "watch later" saving in local dat
 This project makes use of the following libraries, modules, dependencies and componentes:
 
 * MVVM Architecture
+* MotionLayout
 * Dagger Hilt
 * Retrofit
 * Room
@@ -16,3 +17,4 @@ This project makes use of the following libraries, modules, dependencies and com
 * Kotlin Extension Functions
 * Paging3
 * Cache Strategy (With NetworBoundResource)
+* Material Motion for Android
