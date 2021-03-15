@@ -1,6 +1,6 @@
 # TMDB
 
-![alt text](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg)
+![alt text](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_long_1-8ba2ac31f354005783fab473602c34c3f4fd207150182061e425d366e4f34596.svg)
 
 Simple-sample app for searching movies and for "watch later" saving in local database from the TMDB Api (more info at: [https://www.themoviedb.org/documentation/api](https://)).
 
