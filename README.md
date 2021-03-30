@@ -10,11 +10,14 @@ This project makes use of the following libraries, modules, dependencies and com
 * MotionLayout
 * Dagger Hilt
 * Retrofit
-* Room
-* Kotlin Coroutines & Coroutines Flow
-* Navigation Componentes
-* ViewBinding
-* Kotlin Extension Functions
 * Paging3
 * Cache Strategy (With NetworBoundResource)
 * Material Motion for Android
+* Room
+* Kotlin Coroutines & Coroutines Flow
+* Navigation Componentes
+* Navigation DeepLinks
+* Notifications
+* ViewBinding
+* Kotlin Extension Functions
+
